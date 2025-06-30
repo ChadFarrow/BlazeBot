@@ -1,11 +1,12 @@
 # Blaze Bot 🔥
 
-A Nostr bot that posts "Blaze it" every hour, naming a place in the world where it's currently 4:20 PM.
+A Nostr bot that posts "Blaze it" every hour, naming places in the world where it's currently 4:20 AM and 4:20 PM.
 
 ## Features
 
 - Posts every hour to Nostr
-- Finds cities where it's currently 4:20 PM (16:20)
+- Finds cities where it's currently 4:20 AM or 4:20 PM
+- Shows both morning and evening 4:20 times in each post
 - Includes major cities from all time zones worldwide
 - Uses multiple Nostr relays for reliability
 - Test mode for development
@@ -50,10 +51,11 @@ npm run dev
 ## How it works
 
 1. **Hourly Schedule**: Posts every hour on the hour
-2. **Timezone Logic**: Calculates which cities currently have 4:20 PM local time
+2. **Timezone Logic**: Calculates which cities currently have 4:20 AM or 4:20 PM local time
 3. **Location Selection**: 
-   - If exact 4:20 PM matches found, includes all of them
-   - If no exact matches, finds cities in 4 PM hour
+   - Finds cities with exact 4:20 AM and 4:20 PM matches
+   - If no exact matches, finds cities in 4 AM/PM hours
+   - Shows both AM and PM locations in the same post
    - Fallback to random city if needed
 4. **Nostr Publishing**: Posts to multiple relays simultaneously
 
@@ -62,7 +64,8 @@ npm run dev
 ```
 🔥 BLAZE IT! 🔥
 
-It's 4:20 PM in Denver, Colorado 🌍
+🌅 4:20 AM in Tokyo, Japan
+🌇 4:20 PM in New York, New York
 
 #blazeit #420 #nostr #worldwide
 ```
@@ -70,7 +73,8 @@ It's 4:20 PM in Denver, Colorado 🌍
 ```
 🔥 BLAZE IT! 🔥
 
-It's 4:20 PM in London, England, Berlin, Germany 🌍
+🌅 4:20 AM in Sydney, Australia, Auckland, New Zealand
+🌇 4:20 PM in London, England, Berlin, Germany
 
 #blazeit #420 #nostr #worldwide
 ```
