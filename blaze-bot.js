@@ -79,32 +79,47 @@ class BlazeBot {
     const utcHour = now.getUTCHours();
     const utcMinute = now.getUTCMinutes();
     
-    // Find cities where it's currently 4:20 PM (16:20)
-    const blazeLocations = this.worldCities.filter(city => {
-      // Calculate local time for this city
+    // Find cities where it's currently 4:20 AM (04:20)
+    const am420Locations = this.worldCities.filter(city => {
       const localHour = (utcHour + city.offset + 24) % 24;
-      
-      // Check if it's 4:20 PM (16:20) in this city
+      return localHour === 4 && utcMinute === 20;
+    });
+    
+    // Find cities where it's currently 4:20 PM (16:20)
+    const pm420Locations = this.worldCities.filter(city => {
+      const localHour = (utcHour + city.offset + 24) % 24;
       return localHour === 16 && utcMinute === 20;
     });
     
-    // If no exact 4:20 matches, find cities where it's closest to 4:20 PM
-    if (blazeLocations.length === 0) {
-      const closestCities = this.worldCities.filter(city => {
+    // If no exact matches, find fallback cities in 4 AM/PM hours
+    let fallbackAM = [];
+    let fallbackPM = [];
+    
+    if (am420Locations.length === 0) {
+      const am4HourCities = this.worldCities.filter(city => {
         const localHour = (utcHour + city.offset + 24) % 24;
-        return localHour === 16; // At least find cities in the 4 PM hour
+        return localHour === 4;
       });
-      
-      if (closestCities.length > 0) {
-        // Return one random city from those in 4 PM hour
-        return [closestCities[Math.floor(Math.random() * closestCities.length)]];
+      if (am4HourCities.length > 0) {
+        fallbackAM = [am4HourCities[Math.floor(Math.random() * am4HourCities.length)]];
       }
-      
-      // Fallback: return a random city
-      return [this.worldCities[Math.floor(Math.random() * this.worldCities.length)]];
     }
     
-    return blazeLocations;
+    if (pm420Locations.length === 0) {
+      const pm4HourCities = this.worldCities.filter(city => {
+        const localHour = (utcHour + city.offset + 24) % 24;
+        return localHour === 16;
+      });
+      if (pm4HourCities.length > 0) {
+        fallbackPM = [pm4HourCities[Math.floor(Math.random() * pm4HourCities.length)]];
+      }
+    }
+    
+    return {
+      am: am420Locations.length > 0 ? am420Locations : fallbackAM,
+      pm: pm420Locations.length > 0 ? pm420Locations : fallbackPM,
+      exactMatch: am420Locations.length > 0 || pm420Locations.length > 0
+    };
   }
 
   async publishToRelays(event) {
@@ -138,27 +153,36 @@ class BlazeBot {
 
   async postBlazeMessage() {
     const sk = this.getSecretKey();
-    const blazeLocations = this.getCurrentTime420Locations();
+    const locations = this.getCurrentTime420Locations();
     
-    let locationText;
-    if (blazeLocations.length === 1) {
-      locationText = `It's 4:20 PM in ${blazeLocations[0].name} 🌍`;
-    } else if (blazeLocations.length > 1) {
-      const names = blazeLocations.map(loc => loc.name);
-      locationText = `It's 4:20 PM in ${names.join(', ')} 🌍`;
-    } else {
-      locationText = "Somewhere in the world, it's always 4:20 🌍";
+    let locationText = "🔥 BLAZE IT! 🔥\n\n";
+    
+    // Add AM locations
+    if (locations.am.length > 0) {
+      const amNames = locations.am.map(loc => loc.name);
+      const amTime = locations.exactMatch && locations.am.some(loc => 
+        this.worldCities.includes(loc)) ? "4:20 AM" : "4:00 AM hour";
+      locationText += `🌅 ${amTime} in ${amNames.join(', ')}\n`;
     }
-
-    const content = `🔥 BLAZE IT! 🔥
-
-${locationText}
-
-#blazeit #420 #nostr #worldwide`;
+    
+    // Add PM locations  
+    if (locations.pm.length > 0) {
+      const pmNames = locations.pm.map(loc => loc.name);
+      const pmTime = locations.exactMatch && locations.pm.some(loc => 
+        this.worldCities.includes(loc)) ? "4:20 PM" : "4:00 PM hour";
+      locationText += `🌇 ${pmTime} in ${pmNames.join(', ')}\n`;
+    }
+    
+    // Fallback if no locations found
+    if (locations.am.length === 0 && locations.pm.length === 0) {
+      locationText += "Somewhere in the world, it's always 4:20! 🌍\n";
+    }
+    
+    locationText += "\n#blazeit #420 #nostr #worldwide";
 
     const event = finalizeEvent({
       kind: 1,
-      content,
+      content: locationText,
       tags: [
         ['t', 'blazeit'],
         ['t', '420'],
@@ -169,7 +193,11 @@ ${locationText}
     }, sk);
 
     await this.publishToRelays(event);
-    console.log(`🔥 Posted: ${locationText}`);
+    
+    const logMsg = [];
+    if (locations.am.length > 0) logMsg.push(`AM: ${locations.am.map(l => l.name).join(', ')}`);
+    if (locations.pm.length > 0) logMsg.push(`PM: ${locations.pm.map(l => l.name).join(', ')}`);
+    console.log(`🔥 Posted: ${logMsg.join(' | ')}`);
   }
 
   start() {
