@@ -165,6 +165,11 @@ class BlazeBot {
       locationText += `🌅 ${amTime} in ${amNames.join(', ')}\n`;
     }
     
+    // Add blank line between AM and PM if both exist
+    if (locations.am.length > 0 && locations.pm.length > 0) {
+      locationText += "\n";
+    }
+    
     // Add PM locations  
     if (locations.pm.length > 0) {
       const pmNames = locations.pm.map(loc => loc.name);
