@@ -213,10 +213,9 @@ class BlazeBot {
       console.log('🧪 Running in TEST MODE - no actual posts will be made');
     }
 
-    // Post immediately on start
-    this.postBlazeMessage();
+    console.log('⏰ Waiting for next hour to start posting...');
     
-    // Then post every hour (3600000 ms)
+    // Post every hour (3600000 ms) but don't post immediately on start
     setInterval(() => {
       this.postBlazeMessage();
     }, 3600000);
