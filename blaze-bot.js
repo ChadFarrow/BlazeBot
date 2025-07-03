@@ -323,23 +323,32 @@ class BlazeBot {
     }
   }
 
+  async checkAndPost() {
+    const locations = this.getCurrentTime420Locations();
+    
+    // Only post if it's currently 4:20 AM or PM somewhere
+    if (locations.hasCurrent) {
+      await this.postBlazeMessage();
+    }
+  }
+
   async start() {
     console.log('🔥 Starting Blaze Bot...');
-    console.log(`🔥 Bot will post every hour`);
+    console.log(`🔥 Bot will check every minute for 4:20 AM/PM worldwide`);
     
     if (process.env.TEST_MODE === 'true') {
       console.log('🧪 Running in TEST MODE - no actual posts will be made');
     }
 
-    console.log('⏰ Waiting for next hour to start posting...');
+    console.log('⏰ Starting continuous monitoring...');
     
     // Run initial validation
     await this.validateAgainstWebsite();
     
-    // Post every hour (3600000 ms) but don't post immediately on start
+    // Check every minute (60000 ms) for 4:20 AM/PM occurrences
     setInterval(() => {
-      this.postBlazeMessage();
-    }, 3600000);
+      this.checkAndPost();
+    }, 60000);
     
     // Validate against website every 6 hours
     setInterval(() => {
