@@ -280,11 +280,19 @@ class BlazeBot {
     let locationText = "🔥 BLAZE IT! 🔥\n\n";
     
     // It's currently 4:20 somewhere!
-    const currentNames = locations.current.map(loc => loc.name);
-    const currentTimes = [...new Set(locations.current.map(loc => loc.time))];
+    const amLocations = locations.current.filter(loc => loc.time === "4:20 AM");
+    const pmLocations = locations.current.filter(loc => loc.time === "4:20 PM");
     
-    locationText += `🌍 It's ${currentTimes.join(' & ')} in:\n`;
-    locationText += `${currentNames.join(', ')}\n\n`;
+    if (amLocations.length > 0) {
+      locationText += `🌅 It's 4:20 AM in:\n`;
+      locationText += `${amLocations.map(loc => loc.name).join(', ')}\n\n`;
+    }
+    
+    if (pmLocations.length > 0) {
+      locationText += `🌇 It's 4:20 PM in:\n`;
+      locationText += `${pmLocations.map(loc => loc.name).join(', ')}\n\n`;
+    }
+    
     locationText += `🔥 Time to blaze! 🔥\n`;
     
     locationText += "\n#blazeit #420 #nostr #worldwide\n\n📍 https://420worldclock.com/";
