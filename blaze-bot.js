@@ -271,34 +271,21 @@ class BlazeBot {
     const sk = this.getSecretKey();
     const locations = this.getCurrentTime420Locations();
     
+    // This method should only be called when it's actually 4:20 somewhere
+    if (!locations.hasCurrent) {
+      console.log('⚠️  postBlazeMessage called but no current 4:20 locations found');
+      return;
+    }
+    
     let locationText = "🔥 BLAZE IT! 🔥\n\n";
     
-    if (locations.hasCurrent) {
-      // It's currently 4:20 somewhere!
-      const currentNames = locations.current.map(loc => loc.name);
-      const currentTimes = [...new Set(locations.current.map(loc => loc.time))];
-      
-      locationText += `🌍 It's ${currentTimes.join(' & ')} in:\n`;
-      locationText += `${currentNames.join(', ')}\n\n`;
-      locationText += `🔥 Time to blaze! 🔥\n`;
-    } else {
-      // Show countdown to next 4:20
-      const nextLocation = locations.next[0];
-      const hours = Math.floor(nextLocation.minutesUntil / 60);
-      const minutes = nextLocation.minutesUntil % 60;
-      
-      locationText += `⏰ Next 4:20 in ${hours}h ${minutes}m\n`;
-      locationText += `📍 ${nextLocation.name}\n\n`;
-      
-      if (locations.next.length > 1) {
-        locationText += `🌍 Also coming up:\n`;
-        locations.next.slice(1).forEach(loc => {
-          const h = Math.floor(loc.minutesUntil / 60);
-          const m = loc.minutesUntil % 60;
-          locationText += `• ${loc.name} in ${h}h ${m}m\n`;
-        });
-      }
-    }
+    // It's currently 4:20 somewhere!
+    const currentNames = locations.current.map(loc => loc.name);
+    const currentTimes = [...new Set(locations.current.map(loc => loc.time))];
+    
+    locationText += `🌍 It's ${currentTimes.join(' & ')} in:\n`;
+    locationText += `${currentNames.join(', ')}\n\n`;
+    locationText += `🔥 Time to blaze! 🔥\n`;
     
     locationText += "\n#blazeit #420 #nostr #worldwide\n\n📍 https://420worldclock.com/";
 
@@ -316,11 +303,7 @@ class BlazeBot {
 
     await this.publishToRelays(event);
     
-    if (locations.hasCurrent) {
-      console.log(`🔥 Posted: Currently 4:20 in ${locations.current.map(l => l.name).join(', ')}`);
-    } else {
-      console.log(`🔥 Posted: Next 4:20 in ${locations.next[0].name} (${Math.floor(locations.next[0].minutesUntil / 60)}h ${locations.next[0].minutesUntil % 60}m)`);
-    }
+    console.log(`🔥 Posted: Currently 4:20 in ${locations.current.map(l => l.name).join(', ')}`);
   }
 
   async checkAndPost() {
