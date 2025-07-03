@@ -9,46 +9,48 @@ class BlazeBot {
   constructor(nsec, relays = ['wss://relay.damus.io', 'wss://relay.nostr.band', 'wss://nostr.mom', 'wss://relay.primal.net']) {
     this.nsec = nsec;
     this.relays = relays;
-    this.worldCities = [
-      // Major cities across all time zones
-      { name: "Los Angeles, California", offset: -8 },
-      { name: "Denver, Colorado", offset: -7 },
-      { name: "Chicago, Illinois", offset: -6 },
-      { name: "New York, New York", offset: -5 },
-      { name: "São Paulo, Brazil", offset: -3 },
-      { name: "London, England", offset: 0 },
-      { name: "Berlin, Germany", offset: 1 },
-      { name: "Cairo, Egypt", offset: 2 },
-      { name: "Moscow, Russia", offset: 3 },
-      { name: "Dubai, UAE", offset: 4 },
-      { name: "Mumbai, India", offset: 5.5 },
-      { name: "Bangkok, Thailand", offset: 7 },
-      { name: "Beijing, China", offset: 8 },
-      { name: "Tokyo, Japan", offset: 9 },
-      { name: "Sydney, Australia", offset: 10 },
-      { name: "Auckland, New Zealand", offset: 12 },
-      { name: "Honolulu, Hawaii", offset: -10 },
-      { name: "Anchorage, Alaska", offset: -9 },
-      { name: "Mexico City, Mexico", offset: -6 },
-      { name: "Buenos Aires, Argentina", offset: -3 },
-      { name: "Lagos, Nigeria", offset: 1 },
-      { name: "Johannesburg, South Africa", offset: 2 },
-      { name: "Istanbul, Turkey", offset: 3 },
-      { name: "Singapore", offset: 8 },
-      { name: "Seoul, South Korea", offset: 9 },
-      { name: "Perth, Australia", offset: 8 },
-      { name: "Vancouver, Canada", offset: -8 },
-      { name: "Toronto, Canada", offset: -5 },
-      { name: "Paris, France", offset: 1 },
-      { name: "Rome, Italy", offset: 1 },
-      { name: "Madrid, Spain", offset: 1 },
-      { name: "Amsterdam, Netherlands", offset: 1 },
-      { name: "Stockholm, Sweden", offset: 1 },
-      { name: "Helsinki, Finland", offset: 2 },
-      { name: "Warsaw, Poland", offset: 1 },
-      { name: "Prague, Czech Republic", offset: 1 },
-      { name: "Vienna, Austria", offset: 1 },
-      { name: "Zurich, Switzerland", offset: 1 }
+    
+    // Comprehensive timezone data based on 420worldclock.com
+    this.timezones = [
+      // UTC -12 to UTC +14 coverage with proper DST handling
+      { name: "Baker Island, Howland Island", offset: -12, dst: false },
+      { name: "American Samoa, Jarvis Island, Niue", offset: -11, dst: false },
+      { name: "Honolulu, French Polynesia, Cook Islands, Aleutian Islands", offset: -10, dst: false },
+      { name: "French Polynesia, Marquesas Islands", offset: -9.5, dst: false },
+      { name: "Alaska, Gambier Islands", offset: -9, dst: true },
+      { name: "Los Angeles, Vancouver, Tijuana, San Francisco, Seattle", offset: -8, dst: true },
+      { name: "Phoenix, Calgary, Ciudad Juarez, Alberta, Las Vegas, El Paso, Baja, British Columbia", offset: -7, dst: true },
+      { name: "Mexico City, Chicago, Guatemala City, Tegucigalpa, Winnipeg, San Jose, San Salvador", offset: -6, dst: true },
+      { name: "New York, Toronto, Havana, Lima, Bogota, Kingston", offset: -5, dst: true },
+      { name: "Santiago, Santo Domingo, Manaus, Caracas, La Paz, Halifax, New Brunswick, Puerto Rico", offset: -4, dst: true },
+      { name: "St. Johns, Newfoundland, Labrador", offset: -3.5, dst: true },
+      { name: "Argentina, Brazil, Chile, Saint Pierre, Suriname, Falkland Islands, Uruguay", offset: -3, dst: false },
+      { name: "Fernando de Noronha, South Georgia, South Sandwich Islands", offset: -2, dst: false },
+      { name: "Cape Verde, Greenland, Azores Islands", offset: -1, dst: true },
+      { name: "London, Lisbon, Reykjavik, Canary, Monrovia, Accra", offset: 0, dst: true },
+      { name: "Bangui, Ceuta, Lagos, Amsterdam, Berlin, Brussels, Dublin, Madrid, Paris, Stockholm", offset: 1, dst: true },
+      { name: "Blantyre, Cairo, Johannesburg, Lusaka, Tripoli, Beirut, Gaza, Jerusalem, Kiev", offset: 2, dst: true },
+      { name: "Addis Ababa, Asmara, Juba, Mogadishu, Nairobi, Kuwait, Istanbul, Moscow, Mayotte", offset: 3, dst: false },
+      { name: "Tehran", offset: 3.5, dst: false },
+      { name: "Baku, Dubai, Yerevan, Samara, Volgograd, Mahe", offset: 4, dst: false },
+      { name: "Kabul", offset: 4.5, dst: false },
+      { name: "Aqtau, Dushanbe, Oral, Samarkand, Yekaterinburg, Maldives", offset: 5, dst: false },
+      { name: "Mumbai, Colombo", offset: 5.5, dst: false },
+      { name: "Nepal", offset: 5.75, dst: false },
+      { name: "Bishkek, Dhaka, Urumqi, Chagos", offset: 6, dst: false },
+      { name: "Yangon, Cocos, Myanmar", offset: 6.5, dst: false },
+      { name: "Casey, Choibalsan, Hong Kong, Kuching, Shanghai, Taipei, Perth", offset: 7, dst: false },
+      { name: "Western Australia, Eucla", offset: 7.75, dst: false },
+      { name: "Dili, Jayapura, Pyongyang, Seoul, Tokyo, Palau", offset: 8, dst: false },
+      { name: "Broken Hill", offset: 8.5, dst: false },
+      { name: "Vladivostok, Brisbane, Melbourne, Sydney, Guam, Port Moresby, Saipan", offset: 9, dst: false },
+      { name: "Lord Howe Island", offset: 9.5, dst: false },
+      { name: "Norfolk Island, New Caledonia, Papua New Guinea, Magadan, Vanuatu", offset: 10, dst: false },
+      { name: "Wallis, Fiji, Gilbert Islands, Marshall Islands, Tuvalu, Wake Island", offset: 11, dst: false },
+      { name: "Chatham Islands", offset: 11.75, dst: false },
+      { name: "Phoenix Islands, New Zealand, Samoa, Tonga", offset: 12, dst: false },
+      { name: "Line Islands", offset: 13, dst: false },
+      { name: "Kiritimati", offset: 14, dst: false }
     ];
   }
 
@@ -74,51 +76,133 @@ class BlazeBot {
     }
   }
 
-  getCurrentTime420Locations() {
+  // Get the actual UTC offset for a timezone, accounting for DST
+  getCurrentOffset(timezone) {
     const now = new Date();
-    const utcHour = now.getUTCHours();
-    const utcMinute = now.getUTCMinutes();
+    const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
     
-    // Find cities where it's currently 4:20 AM (04:20)
-    const am420Locations = this.worldCities.filter(city => {
-      const localHour = (utcHour + city.offset + 24) % 24;
-      return localHour === 4 && utcMinute === 20;
-    });
+    // Create a date object for this timezone
+    const timeInTimezone = new Date(utcTime + (timezone.offset * 3600000));
     
-    // Find cities where it's currently 4:20 PM (16:20)
-    const pm420Locations = this.worldCities.filter(city => {
-      const localHour = (utcHour + city.offset + 24) % 24;
-      return localHour === 16 && utcMinute === 20;
-    });
-    
-    // If no exact matches, find fallback cities in 4 AM/PM hours
-    let fallbackAM = [];
-    let fallbackPM = [];
-    
-    if (am420Locations.length === 0) {
-      const am4HourCities = this.worldCities.filter(city => {
-        const localHour = (utcHour + city.offset + 24) % 24;
-        return localHour === 4;
-      });
-      if (am4HourCities.length > 0) {
-        fallbackAM = [am4HourCities[Math.floor(Math.random() * am4HourCities.length)]];
+    // If DST is enabled for this timezone, we need to check if it's currently in DST
+    if (timezone.dst) {
+      // Simple DST detection - this could be improved with a proper DST library
+      // For now, we'll use a basic approach based on typical DST rules
+      const month = timeInTimezone.getUTCMonth();
+      const day = timeInTimezone.getUTCDate();
+      const dayOfWeek = timeInTimezone.getUTCDay();
+      
+      // Northern Hemisphere DST (March to November)
+      // This is a simplified version - in production you'd want a proper DST library
+      let isDST = false;
+      if (timezone.offset >= -8 && timezone.offset <= 2) { // Northern Hemisphere
+        // March second Sunday to November first Sunday
+        if (month >= 2 && month <= 9) {
+          if (month === 2) { // March
+            const secondSunday = 8 + (7 - new Date(timeInTimezone.getUTCFullYear(), 2, 8).getUTCDay()) % 7;
+            isDST = day >= secondSunday;
+          } else if (month === 9) { // October
+            const firstSunday = 1 + (7 - new Date(timeInTimezone.getUTCFullYear(), 9, 1).getUTCDay()) % 7;
+            isDST = day < firstSunday;
+          } else {
+            isDST = true;
+          }
+        }
+      }
+      
+      if (isDST) {
+        return timezone.offset + 1;
       }
     }
     
-    if (pm420Locations.length === 0) {
-      const pm4HourCities = this.worldCities.filter(city => {
-        const localHour = (utcHour + city.offset + 24) % 24;
-        return localHour === 16;
-      });
-      if (pm4HourCities.length > 0) {
-        fallbackPM = [pm4HourCities[Math.floor(Math.random() * pm4HourCities.length)]];
+    return timezone.offset;
+  }
+
+  // Get the local time in a specific timezone
+  getLocalTime(timezone) {
+    const now = new Date();
+    const offset = this.getCurrentOffset(timezone);
+    const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
+    const localTime = new Date(utcTime + (offset * 3600000));
+    
+    return {
+      hours: localTime.getUTCHours(),
+      minutes: localTime.getUTCMinutes(),
+      seconds: localTime.getUTCSeconds()
+    };
+  }
+
+  // Find the next 4:20 occurrence in a timezone
+  getNext420Time(timezone) {
+    const now = new Date();
+    const offset = this.getCurrentOffset(timezone);
+    const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
+    const localTime = new Date(utcTime + (offset * 3600000));
+    
+    const currentHour = localTime.getUTCHours();
+    const currentMinute = localTime.getUTCMinutes();
+    
+    // Calculate minutes until next 4:20
+    let minutesUntil420 = 0;
+    
+    if (currentHour < 4) {
+      // Next 4:20 is today at 4:20 AM
+      minutesUntil420 = (4 - currentHour) * 60 + (20 - currentMinute);
+    } else if (currentHour === 4 && currentMinute < 20) {
+      // Next 4:20 is today at 4:20 AM
+      minutesUntil420 = 20 - currentMinute;
+    } else if (currentHour < 16) {
+      // Next 4:20 is today at 4:20 PM
+      minutesUntil420 = (16 - currentHour) * 60 + (20 - currentMinute);
+    } else if (currentHour === 16 && currentMinute < 20) {
+      // Next 4:20 is today at 4:20 PM
+      minutesUntil420 = 20 - currentMinute;
+    } else {
+      // Next 4:20 is tomorrow at 4:20 AM
+      minutesUntil420 = (24 - currentHour) * 60 + (4 * 60 + 20 - currentMinute);
+    }
+    
+    return minutesUntil420;
+  }
+
+  getCurrentTime420Locations() {
+    const now = new Date();
+    const current420Locations = [];
+    const next420Locations = [];
+    
+    // Find locations where it's currently 4:20 AM or PM
+    this.timezones.forEach(timezone => {
+      const localTime = this.getLocalTime(timezone);
+      
+      if ((localTime.hours === 4 && localTime.minutes === 20) || 
+          (localTime.hours === 16 && localTime.minutes === 20)) {
+        current420Locations.push({
+          name: timezone.name,
+          time: localTime.hours === 4 ? "4:20 AM" : "4:20 PM",
+          offset: this.getCurrentOffset(timezone)
+        });
       }
+    });
+    
+    // If no current 4:20 locations, find the next ones
+    if (current420Locations.length === 0) {
+      const nextTimes = this.timezones.map(timezone => ({
+        name: timezone.name,
+        minutesUntil: this.getNext420Time(timezone),
+        offset: this.getCurrentOffset(timezone)
+      }));
+      
+      // Sort by time until next 4:20
+      nextTimes.sort((a, b) => a.minutesUntil - b.minutesUntil);
+      
+      // Get the next 3 locations
+      next420Locations.push(...nextTimes.slice(0, 3));
     }
     
     return {
-      am: am420Locations.length > 0 ? am420Locations : fallbackAM,
-      pm: pm420Locations.length > 0 ? pm420Locations : fallbackPM,
-      exactMatch: am420Locations.length > 0 || pm420Locations.length > 0
+      current: current420Locations,
+      next: next420Locations,
+      hasCurrent: current420Locations.length > 0
     };
   }
 
@@ -157,30 +241,31 @@ class BlazeBot {
     
     let locationText = "🔥 BLAZE IT! 🔥\n\n";
     
-    // Add AM locations
-    if (locations.am.length > 0) {
-      const amNames = locations.am.map(loc => loc.name);
-      const amTime = locations.exactMatch && locations.am.some(loc => 
-        this.worldCities.includes(loc)) ? "4:20 AM" : "4:00 AM hour";
-      locationText += `🌅 ${amTime} in ${amNames.join(', ')}\n`;
-    }
-    
-    // Add blank line between AM and PM if both exist
-    if (locations.am.length > 0 && locations.pm.length > 0) {
-      locationText += "\n";
-    }
-    
-    // Add PM locations  
-    if (locations.pm.length > 0) {
-      const pmNames = locations.pm.map(loc => loc.name);
-      const pmTime = locations.exactMatch && locations.pm.some(loc => 
-        this.worldCities.includes(loc)) ? "4:20 PM" : "4:00 PM hour";
-      locationText += `🌇 ${pmTime} in ${pmNames.join(', ')}\n`;
-    }
-    
-    // Fallback if no locations found
-    if (locations.am.length === 0 && locations.pm.length === 0) {
-      locationText += "Somewhere in the world, it's always 4:20! 🌍\n";
+    if (locations.hasCurrent) {
+      // It's currently 4:20 somewhere!
+      const currentNames = locations.current.map(loc => loc.name);
+      const currentTimes = [...new Set(locations.current.map(loc => loc.time))];
+      
+      locationText += `🌍 It's ${currentTimes.join(' & ')} in:\n`;
+      locationText += `${currentNames.join(', ')}\n\n`;
+      locationText += `🔥 Time to blaze! 🔥\n`;
+    } else {
+      // Show countdown to next 4:20
+      const nextLocation = locations.next[0];
+      const hours = Math.floor(nextLocation.minutesUntil / 60);
+      const minutes = nextLocation.minutesUntil % 60;
+      
+      locationText += `⏰ Next 4:20 in ${hours}h ${minutes}m\n`;
+      locationText += `📍 ${nextLocation.name}\n\n`;
+      
+      if (locations.next.length > 1) {
+        locationText += `🌍 Also coming up:\n`;
+        locations.next.slice(1).forEach(loc => {
+          const h = Math.floor(loc.minutesUntil / 60);
+          const m = loc.minutesUntil % 60;
+          locationText += `• ${loc.name} in ${h}h ${m}m\n`;
+        });
+      }
     }
     
     locationText += "\n#blazeit #420 #nostr #worldwide";
@@ -199,10 +284,11 @@ class BlazeBot {
 
     await this.publishToRelays(event);
     
-    const logMsg = [];
-    if (locations.am.length > 0) logMsg.push(`AM: ${locations.am.map(l => l.name).join(', ')}`);
-    if (locations.pm.length > 0) logMsg.push(`PM: ${locations.pm.map(l => l.name).join(', ')}`);
-    console.log(`🔥 Posted: ${logMsg.join(' | ')}`);
+    if (locations.hasCurrent) {
+      console.log(`🔥 Posted: Currently 4:20 in ${locations.current.map(l => l.name).join(', ')}`);
+    } else {
+      console.log(`🔥 Posted: Next 4:20 in ${locations.next[0].name} (${Math.floor(locations.next[0].minutesUntil / 60)}h ${locations.next[0].minutesUntil % 60}m)`);
+    }
   }
 
   start() {
@@ -222,30 +308,36 @@ class BlazeBot {
   }
 }
 
-// Create and start the bot
-function createBlazeBot() {
-  const botNsec = process.env.BLAZE_BOT_NSEC;
-  
-  if (!botNsec) {
-    console.error('❌ BLAZE_BOT_NSEC environment variable not set');
-    console.error('Please set your Nostr private key: export BLAZE_BOT_NSEC=nsec1...');
-    process.exit(1);
+// Export the BlazeBot class for testing
+export { BlazeBot };
+
+// Only start the bot if this file is run directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  // Create and start the bot
+  function createBlazeBot() {
+    const botNsec = process.env.BLAZE_BOT_NSEC;
+    
+    if (!botNsec) {
+      console.error('❌ BLAZE_BOT_NSEC environment variable not set');
+      console.error('Please set your Nostr private key: export BLAZE_BOT_NSEC=nsec1...');
+      process.exit(1);
+    }
+
+    return new BlazeBot(botNsec);
   }
 
-  return new BlazeBot(botNsec);
+  // Handle graceful shutdown
+  process.on('SIGINT', () => {
+    console.log('\n🔥 Blaze Bot shutting down...');
+    process.exit(0);
+  });
+
+  process.on('SIGTERM', () => {
+    console.log('\n🔥 Blaze Bot shutting down...');
+    process.exit(0);
+  });
+
+  // Start the bot
+  const bot = createBlazeBot();
+  bot.start();
 }
-
-// Handle graceful shutdown
-process.on('SIGINT', () => {
-  console.log('\n🔥 Blaze Bot shutting down...');
-  process.exit(0);
-});
-
-process.on('SIGTERM', () => {
-  console.log('\n🔥 Blaze Bot shutting down...');
-  process.exit(0);
-});
-
-// Start the bot
-const bot = createBlazeBot();
-bot.start();

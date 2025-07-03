@@ -1,0 +1,68 @@
+00:20 UTC: 4:20 AM in: Baku, Dubai, Yerevan, Samara, Volgograd, Mahe
+00:50 UTC: 4:20 AM in: Tehran
+01:20 UTC: 4:20 AM in: Blantyre, Cairo, Johannesburg, Lusaka, Tripoli, Beirut, Gaza, Jerusalem, Kiev; Addis Ababa, Asmara, Juba, Mogadishu, Nairobi, Kuwait, Istanbul, Moscow, Mayotte
+01:20 UTC: 4:20 PM in: Alaska, Gambier Islands
+01:50 UTC: 4:20 PM in: French Polynesia, Marquesas Islands
+02:20 UTC: 4:20 AM in: Bangui, Ceuta, Lagos, Amsterdam, Berlin, Brussels, Dublin, Madrid, Paris, Stockholm
+02:20 UTC: 4:20 PM in: Honolulu, French Polynesia, Cook Islands, Aleutian Islands; Kiritimati
+03:20 UTC: 4:20 AM in: London, Lisbon, Reykjavik, Canary, Monrovia, Accra
+03:20 UTC: 4:20 PM in: American Samoa, Jarvis Island, Niue; Line Islands
+04:20 UTC: 4:20 AM in: Cape Verde, Greenland, Azores Islands
+04:20 UTC: 4:20 PM in: Baker Island, Howland Island; Phoenix Islands, New Zealand, Samoa, Tonga
+04:35 UTC: 4:20 PM in: Chatham Islands
+05:20 UTC: 4:20 PM in: Wallis, Fiji, Gilbert Islands, Marshall Islands, Tuvalu, Wake Island
+06:20 UTC: 4:20 AM in: Fernando de Noronha, South Georgia, South Sandwich Islands
+06:20 UTC: 4:20 PM in: Norfolk Island, New Caledonia, Papua New Guinea, Magadan, Vanuatu
+06:50 UTC: 4:20 AM in: St. Johns, Newfoundland, Labrador
+06:50 UTC: 4:20 PM in: Lord Howe Island
+07:20 UTC: 4:20 AM in: Santiago, Santo Domingo, Manaus, Caracas, La Paz, Halifax, New Brunswick, Puerto Rico; Argentina, Brazil, Chile, Saint Pierre, Suriname, Falkland Islands, Uruguay
+07:20 UTC: 4:20 PM in: Vladivostok, Brisbane, Melbourne, Sydney, Guam, Port Moresby, Saipan
+07:50 UTC: 4:20 PM in: Broken Hill
+08:20 UTC: 4:20 AM in: New York, Toronto, Havana, Lima, Bogota, Kingston
+08:20 UTC: 4:20 PM in: Dili, Jayapura, Pyongyang, Seoul, Tokyo, Palau
+08:35 UTC: 4:20 PM in: Western Australia, Eucla
+09:20 UTC: 4:20 AM in: Mexico City, Chicago, Guatemala City, Tegucigalpa, Winnipeg, San Jose, San Salvador
+09:20 UTC: 4:20 PM in: Casey, Choibalsan, Hong Kong, Kuching, Shanghai, Taipei, Perth
+09:50 UTC: 4:20 PM in: Yangon, Cocos, Myanmar
+10:20 UTC: 4:20 AM in: Phoenix, Calgary, Ciudad Juarez, Alberta, Las Vegas, El Paso, Baja, British Columbia
+10:20 UTC: 4:20 PM in: Bishkek, Dhaka, Urumqi, Chagos
+10:35 UTC: 4:20 PM in: Nepal
+10:50 UTC: 4:20 PM in: Mumbai, Colombo
+11:20 UTC: 4:20 AM in: Los Angeles, Vancouver, Tijuana, San Francisco, Seattle
+11:20 UTC: 4:20 PM in: Aqtau, Dushanbe, Oral, Samarkand, Yekaterinburg, Maldives
+11:50 UTC: 4:20 PM in: Kabul
+12:20 UTC: 4:20 PM in: Baku, Dubai, Yerevan, Samara, Volgograd, Mahe
+12:50 UTC: 4:20 PM in: Tehran
+13:20 UTC: 4:20 AM in: Alaska, Gambier Islands
+13:20 UTC: 4:20 PM in: Blantyre, Cairo, Johannesburg, Lusaka, Tripoli, Beirut, Gaza, Jerusalem, Kiev; Addis Ababa, Asmara, Juba, Mogadishu, Nairobi, Kuwait, Istanbul, Moscow, Mayotte
+13:50 UTC: 4:20 AM in: French Polynesia, Marquesas Islands
+14:20 UTC: 4:20 AM in: Honolulu, French Polynesia, Cook Islands, Aleutian Islands; Kiritimati
+14:20 UTC: 4:20 PM in: Bangui, Ceuta, Lagos, Amsterdam, Berlin, Brussels, Dublin, Madrid, Paris, Stockholm
+15:20 UTC: 4:20 AM in: American Samoa, Jarvis Island, Niue; Line Islands
+15:20 UTC: 4:20 PM in: London, Lisbon, Reykjavik, Canary, Monrovia, Accra
+16:20 UTC: 4:20 AM in: Baker Island, Howland Island; Phoenix Islands, New Zealand, Samoa, Tonga
+16:20 UTC: 4:20 PM in: Cape Verde, Greenland, Azores Islands
+16:35 UTC: 4:20 AM in: Chatham Islands
+17:20 UTC: 4:20 AM in: Wallis, Fiji, Gilbert Islands, Marshall Islands, Tuvalu, Wake Island
+18:20 UTC: 4:20 AM in: Norfolk Island, New Caledonia, Papua New Guinea, Magadan, Vanuatu
+18:20 UTC: 4:20 PM in: Fernando de Noronha, South Georgia, South Sandwich Islands
+18:50 UTC: 4:20 AM in: Lord Howe Island
+18:50 UTC: 4:20 PM in: St. Johns, Newfoundland, Labrador
+19:20 UTC: 4:20 AM in: Vladivostok, Brisbane, Melbourne, Sydney, Guam, Port Moresby, Saipan
+19:20 UTC: 4:20 PM in: Santiago, Santo Domingo, Manaus, Caracas, La Paz, Halifax, New Brunswick, Puerto Rico; Argentina, Brazil, Chile, Saint Pierre, Suriname, Falkland Islands, Uruguay
+19:50 UTC: 4:20 AM in: Broken Hill
+20:20 UTC: 4:20 AM in: Dili, Jayapura, Pyongyang, Seoul, Tokyo, Palau
+20:20 UTC: 4:20 PM in: New York, Toronto, Havana, Lima, Bogota, Kingston
+20:35 UTC: 4:20 AM in: Western Australia, Eucla
+21:20 UTC: 4:20 AM in: Casey, Choibalsan, Hong Kong, Kuching, Shanghai, Taipei, Perth
+21:20 UTC: 4:20 PM in: Mexico City, Chicago, Guatemala City, Tegucigalpa, Winnipeg, San Jose, San Salvador
+21:50 UTC: 4:20 AM in: Yangon, Cocos, Myanmar
+22:20 UTC: 4:20 AM in: Bishkek, Dhaka, Urumqi, Chagos
+22:20 UTC: 4:20 PM in: Phoenix, Calgary, Ciudad Juarez, Alberta, Las Vegas, El Paso, Baja, British Columbia
+22:35 UTC: 4:20 AM in: Nepal
+22:50 UTC: 4:20 AM in: Mumbai, Colombo
+23:20 UTC: 4:20 AM in: Aqtau, Dushanbe, Oral, Samarkand, Yekaterinburg, Maldives
+23:20 UTC: 4:20 PM in: Los Angeles, Vancouver, Tijuana, San Francisco, Seattle
+23:50 UTC: 4:20 AM in: Kabul
+
+Total 4:20 events: 44
