@@ -1,6 +1,6 @@
 {
   "name": "blaze-bot",
-  "version": "1.0.0", 
+  "version": "1.0.0",
   "description": "Blaze Bot - Posts 'Blaze it' every hour with location where it's 4:20 PM",
   "main": "blaze-bot.js",
   "type": "module",
@@ -14,6 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^16.4.5",
+    "node-fetch": "^3.3.2",
     "nostr-tools": "^2.7.0"
   }
 }

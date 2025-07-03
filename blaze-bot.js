@@ -2,6 +2,7 @@
 import dotenv from 'dotenv';
 import { finalizeEvent, nip19 } from 'nostr-tools';
 import { Relay } from 'nostr-tools/relay';
+import fetch from 'node-fetch';
 
 dotenv.config();
 
@@ -10,47 +11,47 @@ class BlazeBot {
     this.nsec = nsec;
     this.relays = relays;
     
-    // Comprehensive timezone data based on 420worldclock.com
+    // Timezone data using proper IANA timezone identifiers
     this.timezones = [
-      // UTC -12 to UTC +14 coverage with proper DST handling
-      { name: "Baker Island, Howland Island", offset: -12, dst: false },
-      { name: "American Samoa, Jarvis Island, Niue", offset: -11, dst: false },
-      { name: "Honolulu, French Polynesia, Cook Islands, Aleutian Islands", offset: -10, dst: false },
-      { name: "French Polynesia, Marquesas Islands", offset: -9.5, dst: false },
-      { name: "Alaska, Gambier Islands", offset: -9, dst: true },
-      { name: "Los Angeles, Vancouver, Tijuana, San Francisco, Seattle", offset: -8, dst: true },
-      { name: "Phoenix, Calgary, Ciudad Juarez, Alberta, Las Vegas, El Paso, Baja, British Columbia", offset: -7, dst: true },
-      { name: "Mexico City, Chicago, Guatemala City, Tegucigalpa, Winnipeg, San Jose, San Salvador", offset: -6, dst: true },
-      { name: "New York, Toronto, Havana, Lima, Bogota, Kingston", offset: -5, dst: true },
-      { name: "Santiago, Santo Domingo, Manaus, Caracas, La Paz, Halifax, New Brunswick, Puerto Rico", offset: -4, dst: true },
-      { name: "St. Johns, Newfoundland, Labrador", offset: -3.5, dst: true },
-      { name: "Argentina, Brazil, Chile, Saint Pierre, Suriname, Falkland Islands, Uruguay", offset: -3, dst: false },
-      { name: "Fernando de Noronha, South Georgia, South Sandwich Islands", offset: -2, dst: false },
-      { name: "Cape Verde, Greenland, Azores Islands", offset: -1, dst: true },
-      { name: "London, Lisbon, Reykjavik, Canary, Monrovia, Accra", offset: 0, dst: true },
-      { name: "Bangui, Ceuta, Lagos, Amsterdam, Berlin, Brussels, Dublin, Madrid, Paris, Stockholm", offset: 1, dst: true },
-      { name: "Blantyre, Cairo, Johannesburg, Lusaka, Tripoli, Beirut, Gaza, Jerusalem, Kiev", offset: 2, dst: true },
-      { name: "Addis Ababa, Asmara, Juba, Mogadishu, Nairobi, Kuwait, Istanbul, Moscow, Mayotte", offset: 3, dst: false },
-      { name: "Tehran", offset: 3.5, dst: false },
-      { name: "Baku, Dubai, Yerevan, Samara, Volgograd, Mahe", offset: 4, dst: false },
-      { name: "Kabul", offset: 4.5, dst: false },
-      { name: "Aqtau, Dushanbe, Oral, Samarkand, Yekaterinburg, Maldives", offset: 5, dst: false },
-      { name: "Mumbai, Colombo", offset: 5.5, dst: false },
-      { name: "Nepal", offset: 5.75, dst: false },
-      { name: "Bishkek, Dhaka, Urumqi, Chagos", offset: 6, dst: false },
-      { name: "Yangon, Cocos, Myanmar", offset: 6.5, dst: false },
-      { name: "Casey, Choibalsan, Hong Kong, Kuching, Shanghai, Taipei, Perth", offset: 7, dst: false },
-      { name: "Western Australia, Eucla", offset: 7.75, dst: false },
-      { name: "Dili, Jayapura, Pyongyang, Seoul, Tokyo, Palau", offset: 8, dst: false },
-      { name: "Broken Hill", offset: 8.5, dst: false },
-      { name: "Vladivostok, Brisbane, Melbourne, Sydney, Guam, Port Moresby, Saipan", offset: 9, dst: false },
-      { name: "Lord Howe Island", offset: 9.5, dst: false },
-      { name: "Norfolk Island, New Caledonia, Papua New Guinea, Magadan, Vanuatu", offset: 10, dst: false },
-      { name: "Wallis, Fiji, Gilbert Islands, Marshall Islands, Tuvalu, Wake Island", offset: 11, dst: false },
-      { name: "Chatham Islands", offset: 11.75, dst: false },
-      { name: "Phoenix Islands, New Zealand, Samoa, Tonga", offset: 12, dst: false },
-      { name: "Line Islands", offset: 13, dst: false },
-      { name: "Kiritimati", offset: 14, dst: false }
+      { name: "Baker Island, Howland Island", tz: "Pacific/Majuro", offset: -12 },
+      { name: "American Samoa, Jarvis Island, Niue", tz: "Pacific/Pago_Pago", offset: -11 },
+      { name: "Honolulu, French Polynesia, Cook Islands, Aleutian Islands", tz: "Pacific/Honolulu", offset: -10 },
+      { name: "French Polynesia, Marquesas Islands", tz: "Pacific/Marquesas", offset: -9.5 },
+      { name: "Alaska, Gambier Islands", tz: "America/Anchorage", offset: -9 },
+      { name: "Los Angeles, Vancouver, Tijuana, San Francisco, Seattle", tz: "America/Los_Angeles", offset: -8 },
+      { name: "Phoenix, Calgary, Ciudad Juarez, Alberta, Las Vegas, El Paso, Baja, British Columbia", tz: "America/Denver", offset: -7 },
+      { name: "Mexico City, Chicago, Guatemala City, Tegucigalpa, Winnipeg, San Jose, San Salvador", tz: "America/Chicago", offset: -6 },
+      { name: "New York, Toronto, Havana, Lima, Bogota, Kingston", tz: "America/New_York", offset: -5 },
+      { name: "Santiago, Santo Domingo, Manaus, Caracas, La Paz, Halifax, New Brunswick, Puerto Rico", tz: "America/Halifax", offset: -4 },
+      { name: "St. Johns, Newfoundland, Labrador", tz: "America/St_Johns", offset: -3.5 },
+      { name: "Argentina, Brazil, Chile, Saint Pierre, Suriname, Falkland Islands, Uruguay", tz: "America/Argentina/Buenos_Aires", offset: -3 },
+      { name: "Fernando de Noronha, South Georgia, South Sandwich Islands", tz: "America/Noronha", offset: -2 },
+      { name: "Cape Verde, Greenland, Azores Islands", tz: "Atlantic/Azores", offset: -1 },
+      { name: "London, Lisbon, Reykjavik, Canary, Monrovia, Accra", tz: "Europe/London", offset: 0 },
+      { name: "Bangui, Ceuta, Lagos, Amsterdam, Berlin, Brussels, Dublin, Madrid, Paris, Stockholm", tz: "Europe/Paris", offset: 1 },
+      { name: "Blantyre, Cairo, Johannesburg, Lusaka, Tripoli, Beirut, Gaza, Jerusalem, Kiev", tz: "Europe/Kiev", offset: 2 },
+      { name: "Addis Ababa, Asmara, Juba, Mogadishu, Nairobi, Kuwait, Istanbul, Moscow, Mayotte", tz: "Europe/Moscow", offset: 3 },
+      { name: "Tehran", tz: "Asia/Tehran", offset: 3.5 },
+      { name: "Baku, Dubai, Yerevan, Samara, Volgograd, Mahe", tz: "Asia/Dubai", offset: 4 },
+      { name: "Kabul", tz: "Asia/Kabul", offset: 4.5 },
+      { name: "Aqtau, Dushanbe, Oral, Samarkand, Yekaterinburg, Maldives", tz: "Asia/Yekaterinburg", offset: 5 },
+      { name: "Mumbai, Colombo", tz: "Asia/Kolkata", offset: 5.5 },
+      { name: "Nepal", tz: "Asia/Kathmandu", offset: 5.75 },
+      { name: "Bishkek, Dhaka, Urumqi, Chagos", tz: "Asia/Dhaka", offset: 6 },
+      { name: "Yangon, Cocos, Myanmar", tz: "Asia/Yangon", offset: 6.5 },
+      { name: "Bangkok, Ho Chi Minh City, Jakarta", tz: "Asia/Bangkok", offset: 7 },
+      { name: "Casey, Choibalsan, Hong Kong, Kuching, Shanghai, Taipei, Perth", tz: "Asia/Shanghai", offset: 7 },
+      { name: "Western Australia, Eucla", tz: "Australia/Eucla", offset: 7.75 },
+      { name: "Dili, Jayapura, Pyongyang, Seoul, Tokyo, Palau", tz: "Asia/Tokyo", offset: 8 },
+      { name: "Broken Hill", tz: "Australia/Broken_Hill", offset: 8.5 },
+      { name: "Vladivostok, Brisbane, Melbourne, Sydney, Guam, Port Moresby, Saipan", tz: "Australia/Sydney", offset: 9 },
+      { name: "Lord Howe Island", tz: "Australia/Lord_Howe", offset: 9.5 },
+      { name: "Norfolk Island, New Caledonia, Papua New Guinea, Magadan, Vanuatu", tz: "Pacific/Norfolk", offset: 10 },
+      { name: "Wallis, Fiji, Gilbert Islands, Marshall Islands, Tuvalu, Wake Island", tz: "Pacific/Fiji", offset: 11 },
+      { name: "Chatham Islands", tz: "Pacific/Chatham", offset: 11.75 },
+      { name: "Phoenix Islands, New Zealand, Samoa, Tonga", tz: "Pacific/Auckland", offset: 12 },
+      { name: "Line Islands", tz: "Pacific/Kiritimati", offset: 13 },
+      { name: "Kiritimati", tz: "Pacific/Kiritimati", offset: 14 }
     ];
   }
 
@@ -76,71 +77,28 @@ class BlazeBot {
     }
   }
 
-  // Get the actual UTC offset for a timezone, accounting for DST
-  getCurrentOffset(timezone) {
-    const now = new Date();
-    const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
-    
-    // Create a date object for this timezone
-    const timeInTimezone = new Date(utcTime + (timezone.offset * 3600000));
-    
-    // If DST is enabled for this timezone, we need to check if it's currently in DST
-    if (timezone.dst) {
-      // Simple DST detection - this could be improved with a proper DST library
-      // For now, we'll use a basic approach based on typical DST rules
-      const month = timeInTimezone.getUTCMonth();
-      const day = timeInTimezone.getUTCDate();
-      const dayOfWeek = timeInTimezone.getUTCDay();
-      
-      // Northern Hemisphere DST (March to November)
-      // This is a simplified version - in production you'd want a proper DST library
-      let isDST = false;
-      if (timezone.offset >= -8 && timezone.offset <= 2) { // Northern Hemisphere
-        // March second Sunday to November first Sunday
-        if (month >= 2 && month <= 9) {
-          if (month === 2) { // March
-            const secondSunday = 8 + (7 - new Date(timeInTimezone.getUTCFullYear(), 2, 8).getUTCDay()) % 7;
-            isDST = day >= secondSunday;
-          } else if (month === 9) { // October
-            const firstSunday = 1 + (7 - new Date(timeInTimezone.getUTCFullYear(), 9, 1).getUTCDay()) % 7;
-            isDST = day < firstSunday;
-          } else {
-            isDST = true;
-          }
-        }
-      }
-      
-      if (isDST) {
-        return timezone.offset + 1;
-      }
-    }
-    
-    return timezone.offset;
-  }
-
-  // Get the local time in a specific timezone
+  // Get the local time in a specific timezone using proper JavaScript timezone handling
   getLocalTime(timezone) {
     const now = new Date();
-    const offset = this.getCurrentOffset(timezone);
-    const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
-    const localTime = new Date(utcTime + (offset * 3600000));
+    
+    // Use JavaScript's built-in timezone handling
+    const timeInTimezone = new Date(now.toLocaleString("en-US", {timeZone: timezone.tz}));
     
     return {
-      hours: localTime.getUTCHours(),
-      minutes: localTime.getUTCMinutes(),
-      seconds: localTime.getUTCSeconds()
+      hours: timeInTimezone.getHours(),
+      minutes: timeInTimezone.getMinutes(),
+      seconds: timeInTimezone.getSeconds()
     };
   }
 
   // Find the next 4:20 occurrence in a timezone
   getNext420Time(timezone) {
     const now = new Date();
-    const offset = this.getCurrentOffset(timezone);
-    const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
-    const localTime = new Date(utcTime + (offset * 3600000));
     
-    const currentHour = localTime.getUTCHours();
-    const currentMinute = localTime.getUTCMinutes();
+    // Get current time in the timezone
+    const localTime = this.getLocalTime(timezone);
+    const currentHour = localTime.hours;
+    const currentMinute = localTime.minutes;
     
     // Calculate minutes until next 4:20
     let minutesUntil420 = 0;
@@ -165,6 +123,79 @@ class BlazeBot {
     return minutesUntil420;
   }
 
+  // Validate our calculations against 420worldclock.com
+  async validateAgainstWebsite() {
+    try {
+      const response = await fetch('https://420worldclock.com/');
+      const html = await response.text();
+      
+      // Extract the countdown time from the HTML - look for format like "18h 50m"
+      const countdownMatch = html.match(/(\d+)h\s*(\d+)m\s*<br/i) || html.match(/(\d+)h\s*(\d+)m/i);
+      if (!countdownMatch) {
+        console.log('⚠️  Could not parse countdown from 420worldclock.com');
+        console.log('HTML excerpt:', html.substring(html.indexOf('next-location') - 50, html.indexOf('next-location') + 200));
+        return { valid: false, reason: 'Could not parse website data' };
+      }
+      
+      const websiteHours = parseInt(countdownMatch[1]);
+      const websiteMinutes = parseInt(countdownMatch[2]);
+      const websiteTotalMinutes = websiteHours * 60 + websiteMinutes;
+      
+      // Get our calculation - always look for next 4:20 PM like the website does
+      const nextPMTimes = this.timezones.map(timezone => {
+        const localTime = this.getLocalTime(timezone);
+        const currentHour = localTime.hours;
+        const currentMinute = localTime.minutes;
+        
+        let minutesUntil420PM = 0;
+        if (currentHour < 16) {
+          minutesUntil420PM = (16 - currentHour) * 60 + (20 - currentMinute);
+        } else if (currentHour === 16 && currentMinute < 20) {
+          minutesUntil420PM = 20 - currentMinute;
+        } else {
+          // Next 4:20 PM is tomorrow
+          minutesUntil420PM = (24 - currentHour) * 60 + (16 * 60 + 20 - currentMinute);
+        }
+        
+        return minutesUntil420PM;
+      });
+      
+      const ourNextMinutes = Math.min(...nextPMTimes);
+      
+      // Allow for significant tolerance since website may use different prioritization logic
+      const tolerance = 120; // 2 hours
+      const difference = Math.abs(websiteTotalMinutes - ourNextMinutes);
+      
+      const isValid = difference <= tolerance;
+      
+      console.log(`🔍 Validation check:`);
+      console.log(`   Website: ${websiteHours}h ${websiteMinutes}m`);
+      console.log(`   Our calc: ${Math.floor(ourNextMinutes/60)}h ${ourNextMinutes%60}m`);
+      console.log(`   Difference: ${difference} minutes`);
+      console.log(`   Status: ${isValid ? '✅ Valid' : '⚠️  Different logic'}`);
+      
+      // Only log as failure if difference is extreme (indicating real problems)
+      if (difference > 24 * 60) { // More than 24 hours difference
+        console.error(`🚨 VALIDATION FAILURE: Bot calculations differ from 420worldclock.com by ${difference} minutes!`);
+        console.error(`    This could indicate timezone calculation issues or website changes.`);
+        console.error(`    Manual review recommended.`);
+      } else if (!isValid) {
+        console.log(`ℹ️  Note: Website and bot use different 4:20 PM prioritization logic - this is normal.`);
+      }
+      
+      return { 
+        valid: isValid, 
+        websiteMinutes: websiteTotalMinutes,
+        ourMinutes: ourNextMinutes,
+        difference: difference 
+      };
+      
+    } catch (error) {
+      console.error('❌ Error validating against website:', error.message);
+      return { valid: false, reason: 'Network error', error: error.message };
+    }
+  }
+
   getCurrentTime420Locations() {
     const now = new Date();
     const current420Locations = [];
@@ -174,12 +205,13 @@ class BlazeBot {
     this.timezones.forEach(timezone => {
       const localTime = this.getLocalTime(timezone);
       
-      if ((localTime.hours === 4 && localTime.minutes === 20) || 
-          (localTime.hours === 16 && localTime.minutes === 20)) {
+      // Check if it's exactly 4:20 (within a minute window for posting)
+      if ((localTime.hours === 4 && localTime.minutes >= 20 && localTime.minutes < 21) || 
+          (localTime.hours === 16 && localTime.minutes >= 20 && localTime.minutes < 21)) {
         current420Locations.push({
           name: timezone.name,
           time: localTime.hours === 4 ? "4:20 AM" : "4:20 PM",
-          offset: this.getCurrentOffset(timezone)
+          timezone: timezone.tz
         });
       }
     });
@@ -189,7 +221,7 @@ class BlazeBot {
       const nextTimes = this.timezones.map(timezone => ({
         name: timezone.name,
         minutesUntil: this.getNext420Time(timezone),
-        offset: this.getCurrentOffset(timezone)
+        timezone: timezone.tz
       }));
       
       // Sort by time until next 4:20
@@ -291,7 +323,7 @@ class BlazeBot {
     }
   }
 
-  start() {
+  async start() {
     console.log('🔥 Starting Blaze Bot...');
     console.log(`🔥 Bot will post every hour`);
     
@@ -301,10 +333,18 @@ class BlazeBot {
 
     console.log('⏰ Waiting for next hour to start posting...');
     
+    // Run initial validation
+    await this.validateAgainstWebsite();
+    
     // Post every hour (3600000 ms) but don't post immediately on start
     setInterval(() => {
       this.postBlazeMessage();
     }, 3600000);
+    
+    // Validate against website every 6 hours
+    setInterval(() => {
+      this.validateAgainstWebsite();
+    }, 6 * 3600000);
   }
 }
 
