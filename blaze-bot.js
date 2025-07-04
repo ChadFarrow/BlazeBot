@@ -295,7 +295,7 @@ class BlazeBot {
     
     locationText += `🔥 Time to blaze! 🔥\n`;
     
-    locationText += "\n#blazeit #420 #nostr #worldwide\n\n📍 https://420worldclock.com/";
+    locationText += "\n#blazeit #420 #nostr #worldwide";
 
     const event = finalizeEvent({
       kind: 1,
